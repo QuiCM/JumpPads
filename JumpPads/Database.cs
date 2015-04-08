@@ -93,6 +93,11 @@ namespace JumpPads
 			return -1;
 		}
 
+		public void DeleteJumpPad(int id)
+		{
+			Query("DELETE FROM JumpPads WHERE ID = @0", id);
+		}
+
 		public void UpdateJumpPad(JumpPad update)
 		{
 			var query =

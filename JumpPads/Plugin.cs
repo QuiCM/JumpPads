@@ -124,6 +124,35 @@ namespace JumpPads
 					args.Player.SendSuccessMessage("JumpPads will now effect you.");
 					return;
 				}
+
+				if (args.Parameters[0].ToLowerInvariant() == "d" || args.Parameters[0].ToLowerInvariant() == "delete")
+				{
+					if (_jumpPads.Count == 0)
+					{
+						args.Player.SendErrorMessage("No jumppads have been defined.");
+						return;
+					}
+
+					var index = -1;
+					for (var i = 0; i < _jumpPads.Count; i++)
+					{
+						if (_jumpPads[i].InArea(args.Player))
+						{
+							index = i;
+							break;
+						}
+					}
+
+					if (index == -1)
+					{
+						args.Player.SendErrorMessage("Failed to find a warpplate underneath you.");
+						return;
+					}
+
+					var jp = _jumpPads[index];
+					_jumpPads.RemoveAt(index);
+					db.DeleteJumpPad(jp.Id);
+				}
 			}
 
 			if (args.Parameters.Count < 2)

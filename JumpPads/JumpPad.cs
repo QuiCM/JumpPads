@@ -19,6 +19,17 @@ namespace JumpPads
 			this.permission = permission;
 		}
 
+		public bool InArea(TSPlayer player)
+		{
+			//Player is in jump pad area
+			if (player.TileX <= posx + width && player.TileX >= posx &&
+				player.TileY >= posy - height && player.TileY <= posy)
+			{
+				return true;
+			}
+			return false;
+		}
+
 		public bool CanJump(TSPlayer player)
 		{
 			if (player == null || (!player.Group.HasPermission(permission) && !string.IsNullOrEmpty(permission)))
@@ -26,14 +37,7 @@ namespace JumpPads
 				return false;
 			}
 
-			//Player is in jump pad area
-			if (player.TileX <= posx + width && player.TileX >= posx &&
-				player.TileY >= posy - height && player.TileY <= posy)
-			{
-				return true;
-			}
-
-			return false;
+			return InArea(player);
 		}
 
 		public void Jump(TSPlayer player)

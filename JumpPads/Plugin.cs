@@ -145,13 +145,16 @@ namespace JumpPads
 
 					if (index == -1)
 					{
-						args.Player.SendErrorMessage("Failed to find a warpplate underneath you.");
+						args.Player.SendErrorMessage("Failed to find a jumppad underneath you.");
 						return;
 					}
 
 					var jp = _jumpPads[index];
 					_jumpPads.RemoveAt(index);
 					db.DeleteJumpPad(jp.Id);
+
+					args.Player.SendSuccessMessage("Deleted the jumppad underneath you.");
+					return;
 				}
 			}
 

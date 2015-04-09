@@ -25,6 +25,7 @@ namespace JumpPads
 				new SqlColumn("PosX", MySqlDbType.Float),
 				new SqlColumn("PosY", MySqlDbType.Float),
 				new SqlColumn("Jump", MySqlDbType.Float),
+				new SqlColumn("Launch", MySqlDbType.Float),
 				new SqlColumn("Width", MySqlDbType.Int32),
 				new SqlColumn("Height", MySqlDbType.Int32),
 				new SqlColumn("Permission", MySqlDbType.Text));
@@ -78,8 +79,8 @@ namespace JumpPads
 		
 		public int AddJumpPad(JumpPad copy)
 		{
-			Query("INSERT INTO JumpPads (PosX, PosY, Jump, Width, Height, Permission) VALUES (@0, @1, @2, @3, @4, @5)",
-				copy.posx, copy.posy, copy.jump, copy.width, copy.height, copy.permission);
+			Query("INSERT INTO JumpPads (PosX, PosY, Jump, Launch, Width, Height, Permission) VALUES (@0, @1, @2, @3, @4, @5, @6)",
+				copy.posx, copy.posy, copy.jump, copy.launch, copy.width, copy.height, copy.permission);
 
 			using (var reader = QueryReader("SELECT max(ID) FROM JumpPads"))
 			{
@@ -102,8 +103,8 @@ namespace JumpPads
 		{
 			var query =
 				string.Format(
-					"UPDATE JumpPads SET PosX = {0}, PosY = {1}, Jump = {2}, Width = {3}, Height = {4}, Permission = @0 WHERE ID = @1",
-					update.posx, update.posy, update.jump, update.width, update.height);
+					"UPDATE JumpPads SET PosX = {0}, PosY = {1}, Jump = {2}, Launch = {3} Width = {4}, Height = {5}, Permission = @0 WHERE ID = @1",
+					update.posx, update.posy, update.jump, update.launch, update.width, update.height);
 			
 			Query(query, update.permission, update.Id);
 		}
@@ -118,11 +119,12 @@ namespace JumpPads
 					var x = reader.Get<float>("PosX");
 					var y = reader.Get<float>("PosY");
 					var jump = reader.Get<float>("Jump");
+					var launch = reader.Get<float>("Launch");
 					var width = reader.Get<int>("Width");
 					var height = reader.Get<int>("Height");
 					var permission = reader.Get<string>("Permission");
 
-					var jumpPad = new JumpPad(x, y, jump, width, height, permission) {Id = id};
+					var jumpPad = new JumpPad(x, y, jump, launch, width, height, permission) {Id = id};
 					list.Add(jumpPad);
 				}
 			}

@@ -47,7 +47,7 @@ namespace JumpPads
 				AllowServer = false,
 				HelpDesc = new[]
 				{
-					"Usage: jumppad [width|height|jump|permission] [value].",
+					"Usage: jumppad [width|height|jump|launch|permission] [value].",
 					"Disable jumppads for yourself by using jumppad disable.",
 					"Re-enable them by using jumppad enable"
 				}
@@ -94,6 +94,7 @@ namespace JumpPads
 					}
 
 					jumpPad.Jump(player);
+					jumpPad.Launch(player);
 					TSPlayer.All.SendData(PacketTypes.PlayerUpdate, "", player.Index);
 				}
 			}
@@ -160,7 +161,7 @@ namespace JumpPads
 
 			if (args.Parameters.Count < 2)
 			{
-				args.Player.SendErrorMessage("Invalid syntax. {0}jumppad [width|height|jump|permission] [value]",
+				args.Player.SendErrorMessage("Invalid syntax. {0}jumppad [width|height|jump|launch|permission] [value]",
 					TShock.Config.CommandSpecifier);
 				return;
 			}
@@ -170,7 +171,7 @@ namespace JumpPads
 
 			if (jumpPad == null)
 			{
-				jumpPad = new JumpPad(args.Player.TileX, args.Player.TileY, 0f, 3, 1, string.Empty);
+				jumpPad = new JumpPad(args.Player.TileX, args.Player.TileY, 0f, 0f, 3, 1, string.Empty);
 				newJumpPad = true;
 			}
 
@@ -221,6 +222,21 @@ namespace JumpPads
 					break;
 				}
 
+				case "launch":
+				case "l":
+				{
+					float launch;
+					if (!float.TryParse(args.Parameters[1], out launch))
+					{
+						args.Player.SendErrorMessage("Invalid launch power.");
+						return;
+					}
+
+					jumpPad.launch = launch;
+					args.Player.SendSuccessMessage("JumpPad on your position now has a launch power of {0}.", launch);
+					break;
+				}
+
 				case "permission":
 				case "perm":
 				case "p":
@@ -234,7 +250,7 @@ namespace JumpPads
 
 				default:
 				{
-					args.Player.SendErrorMessage("Invalid syntax. {0}jumpplate [width|height|jump|permission] [value]",
+					args.Player.SendErrorMessage("Invalid syntax. {0}jumppad [width|height|jump|permission] [value]",
 						TShock.Config.CommandSpecifier);
 					break;
 				}

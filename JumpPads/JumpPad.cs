@@ -43,7 +43,7 @@ namespace JumpPads
 
 		public void Jump(TSPlayer player)
 		{
-			if (jump > 0)
+			if (jump > 0 || jump < 0)
 			{
 				player.TPlayer.velocity.Y = jump;
 			}
@@ -51,7 +51,7 @@ namespace JumpPads
 
 		public void Launch(TSPlayer player)
 		{
-			if (launch > 0)
+			if (launch > 0 || launch < 0)
 			{
 				player.TPlayer.velocity.X = launch;
 			}

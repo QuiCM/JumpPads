@@ -86,7 +86,7 @@ namespace JumpPads
 			{
 				if (reader.Read())
 				{
-					var id = reader.Get<int>("max(ID)") + 1;
+					var id = reader.Get<int>("max(ID)");
 					return id;
 				}
 			}

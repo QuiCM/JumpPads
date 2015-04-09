@@ -103,7 +103,7 @@ namespace JumpPads
 		{
 			var query =
 				string.Format(
-					"UPDATE JumpPads SET PosX = {0}, PosY = {1}, Jump = {2}, Launch = {3} Width = {4}, Height = {5}, Permission = @0 WHERE ID = @1",
+					"UPDATE JumpPads SET PosX = {0}, PosY = {1}, Jump = {2}, Launch = {3}, Width = {4}, Height = {5}, Permission = @0 WHERE ID = @1",
 					update.posx, update.posy, update.jump, update.launch, update.width, update.height);
 			
 			Query(query, update.permission, update.Id);

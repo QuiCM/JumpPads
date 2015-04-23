@@ -112,7 +112,7 @@ namespace JumpPads
 		{
 			if (args.Parameters.Count == 1)
 			{
-				if (args.Parameters[0].ToLowerInvariant() == "reload")
+				if (args.Parameters[0].ToLowerInvariant() == "reload" && args.Player.Group.HasPermission("jumppads.reload"))
 				{
 					_jumpPads.Clear();
 					db.LoadJumpPads(ref _jumpPads);
@@ -135,7 +135,8 @@ namespace JumpPads
 					return;
 				}
 
-				if (args.Parameters[0].ToLowerInvariant() == "d" || args.Parameters[0].ToLowerInvariant() == "delete")
+				if ((args.Parameters[0].ToLowerInvariant() == "d" || args.Parameters[0].ToLowerInvariant() == "delete")
+					&& args.Player.Group.HasPermission("jumppads.delete"))
 				{
 					if (_jumpPads.Count == 0)
 					{

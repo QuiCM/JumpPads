@@ -177,12 +177,18 @@ namespace JumpPads
 			}
 
 			var newJumpPad = false;
+			var makeWire = true;
 			var jumpPad = _jumpPads.FirstOrDefault(j => j.CanJump(args.Player));
 
 			if (jumpPad == null)
 			{
 				jumpPad = new JumpPad(args.Player.TileX, args.Player.TileY, 0f, 0f, 3, 1, string.Empty);
 				newJumpPad = true;
+			}
+
+			if (args.Parameters.Last().ToLowerInvariant() == "-nowire")
+			{
+				makeWire = false;
 			}
 
 			switch (args.Parameters[0].ToLowerInvariant())
@@ -197,7 +203,11 @@ namespace JumpPads
 						return;
 					}
 
-					jumpPad.ReWriteWire(width, -1);
+					if (makeWire)
+					{
+						jumpPad.ReWriteWire(width, -1);
+					}
+
 					args.Player.SendSuccessMessage("JumpPad on your position is now {0} blocks wide.", width);
 					break;
 				}
@@ -212,7 +222,11 @@ namespace JumpPads
 						return;
 					}
 
-					jumpPad.ReWriteWire(-1, height);
+					if (makeWire)
+					{
+						jumpPad.ReWriteWire(-1, height);
+					}
+
 					args.Player.SendSuccessMessage("JumpPad on your position is now {0} blocks high.", height);
 					break;
 				}
@@ -270,7 +284,11 @@ namespace JumpPads
 			{
 				jumpPad.Id = db.AddJumpPad(jumpPad);
 				_jumpPads.Add(jumpPad);
-				jumpPad.WriteWire();
+
+				if (makeWire)
+				{
+					jumpPad.WriteWire();
+				}
 			}
 			else
 			{

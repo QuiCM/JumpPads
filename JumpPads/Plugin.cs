@@ -10,7 +10,7 @@ using TShockAPI;
 namespace JumpPads
 {
 	[ApiVersion(1, 17)]
-    public class Plugin : TerrariaPlugin
+	public class Plugin : TerrariaPlugin
 	{
 		public override string Author
 		{
@@ -29,7 +29,7 @@ namespace JumpPads
 
 		private static Database db;
 		private static Timer updateTimer;
-		private static List<JumpPad> _jumpPads = new List<JumpPad>(); 
+		private static List<JumpPad> _jumpPads = new List<JumpPad>();
 		private static bool[] _disable = new bool[Main.player.Length];
 
 		public Plugin(Main game) : base(game)
@@ -112,6 +112,15 @@ namespace JumpPads
 		{
 			if (args.Parameters.Count == 1)
 			{
+				if (args.Parameters[0].ToLowerInvariant() == "reload")
+				{
+					_jumpPads.Clear();
+					db.LoadJumpPads(ref _jumpPads);
+
+					args.Player.SendSuccessMessage("JumpPads have been reloaded.");
+					return;
+				}
+
 				if (args.Parameters[0].ToLowerInvariant() == "disable")
 				{
 					_disable[args.Player.Index] = true;
@@ -153,6 +162,7 @@ namespace JumpPads
 					var jp = _jumpPads[index];
 					_jumpPads.RemoveAt(index);
 					db.DeleteJumpPad(jp.Id);
+					jp.UnwriteWire();
 
 					args.Player.SendSuccessMessage("Deleted the jumppad underneath you.");
 					return;
@@ -187,7 +197,7 @@ namespace JumpPads
 						return;
 					}
 
-					jumpPad.width = width;
+					jumpPad.ReWriteWire(width, -1);
 					args.Player.SendSuccessMessage("JumpPad on your position is now {0} blocks wide.", width);
 					break;
 				}
@@ -202,7 +212,7 @@ namespace JumpPads
 						return;
 					}
 
-					jumpPad.height = height;
+					jumpPad.ReWriteWire(-1, height);
 					args.Player.SendSuccessMessage("JumpPad on your position is now {0} blocks high.", height);
 					break;
 				}
@@ -260,6 +270,7 @@ namespace JumpPads
 			{
 				jumpPad.Id = db.AddJumpPad(jumpPad);
 				_jumpPads.Add(jumpPad);
+				jumpPad.WriteWire();
 			}
 			else
 			{

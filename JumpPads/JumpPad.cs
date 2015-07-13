@@ -247,13 +247,13 @@ namespace JumpPads
 			var starty = Netplay.GetSectionY((int)posy);
 			var endy = Netplay.GetSectionY((int)(posy - 1));
 
-			foreach (var sock in Netplay.serverSock.Where(s => s.active))
+			foreach (var sock in Netplay.Clients.Where(s => s.IsActive))
 			{
 				for (var i = startx; i <= endx; i++)
 				{
 					for (var j = endy; j <= starty; j++)
 					{
-						sock.tileSection[i, j] = false;
+						sock.TileSections[i, j] = false;
 					}
 				}
 			}

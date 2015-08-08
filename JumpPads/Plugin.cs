@@ -9,7 +9,7 @@ using TShockAPI;
 
 namespace JumpPads
 {
-	[ApiVersion(1, 20)]
+	[ApiVersion(1, 21)]
 	public class Plugin : TerrariaPlugin
 	{
 		public override string Author
